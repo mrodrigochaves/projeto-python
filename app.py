@@ -1,13 +1,42 @@
-import dash
-import dash_bootstrap_components as dbc
+from dash import Dash, dcc, html, Input, Output
+import dash_auth
 
-estilos = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "https://fonts.googleapis.com/icon?family=Material+Icons", dbc.themes.COSMO]
-dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates@V1.0.4/dbc.min.css"
-# FONT_AWESOME = "https://use.fontawesome.com/releases/v5.10.2/css/all.css"
+# Keep this out of source code repository - save in a file or a databasepython 
+VALID_USERNAME_PASSWORD_PAIRS = {
+    'hello': 'world'
+}
 
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=estilos + [dbc_css])
+app = Dash(__name__, external_stylesheets=external_stylesheets)
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
 
-app.config['suppress_callback_exceptions'] = True
-app.scripts.config.serve_locally = True
-server = app.server
+app.layout = html.Div([
+    html.H1('Welcome to the app'),
+    html.H3('You are successfully authorized'),
+    dcc.Dropdown(['A', 'B'], 'A', id='dropdown'),
+    dcc.Graph(id='graph')
+], className='container')
+
+@app.callback(
+    Output('graph', 'figure'),
+    [Input('dropdown', 'value')])
+def update_graph(dropdown_value):
+    return {
+        'layout': {
+            'title': 'Graph of {}'.format(dropdown_value),
+            'margin': {
+                'l': 20,
+                'b': 20,
+                'r': 10,
+                't': 60
+            }
+        },
+        'data': [{'x': [1, 2, 3], 'y': [4, 1, 2]}]
+    }
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
