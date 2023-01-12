@@ -15,7 +15,15 @@ content = html.Div(id="page-content")
 
 
 app.layout = dbc.Container(children=[
-    dbc.Row([])
+    dbc.Row([
+        dbc.Col([
+            dcc.Location("url"),
+            sidebar.layout
+        ], md=2),
+        dbc.Col([
+            content
+        ], md=10)
+    ])
 
 
 
@@ -23,6 +31,14 @@ app.layout = dbc.Container(children=[
 ], fluid=True,)
 
 
+@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+def render_page_content(pathname):
+    if pathname == "/" or pathname == "/dashboards":
+        return dashboards.layout
+
+    if pathname == "/extratos":
+        return extratos.layout
+        
 
 
 if __name__ == '__main__':
