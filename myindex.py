@@ -6,9 +6,7 @@ import pandas as pd
 import plotly.express as px
 
 from app import *
-
-
-
+from components import sidebar, dashboards, extratos
 
 # ==== Layout ==== #
 content = html.Div(id="page-content")
@@ -38,7 +36,7 @@ def render_page_content(pathname):
 
     if pathname == "/extratos":
         return extratos.layout
-        
+
 
 
 if __name__ == '__main__':
