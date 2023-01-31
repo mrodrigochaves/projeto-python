@@ -1,2 +1,4 @@
 # projeto-python
- Projeto de construção de Login e Dashbord em Python
+ Projeto de construção Dashbord Covid-19 em Python
+
+ Asimov
